@@ -9,6 +9,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+// cmd창에서 bin 폴더까지 간 후
+// java com.estsoft.network.test.TCPServer
+// java com.estsoft.network.echo.EchoServer
+
 //03.14(5)
 public class EchoClient {
 	private static final String SERVER_IP = "192.168.1.27";
@@ -20,25 +24,28 @@ public class EchoClient {
 		try {
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
-
+		
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));	// byte를 char로 바꿔줌
-			
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8"));	// char->byte
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8"),true);	// char->byte
+			// true : PrintWriter버퍼 내부에 값이 들어오면 바로 보내겠다는 뜻(flush할 필요 X) -> autoFlush
+			// InputStreamReader: byte-> 문자
+			// OutputStreamWriter : 문자 -> byte
 			
 			while (true) {
-				System.out.print(">>");
+				System.out.print(">> ");
 				String msg = sc.nextLine();
 
 				if (msg.equals("exit")) {
 					break;
 				}
 				
-				pw.println("message");
-//				outputStream.write((message+"\n").getBytes());
+				pw.println(msg);
+				pw.flush();
+//				socket.getOutputStream.write((message+"\n").getBytes());
 				
 				String data = null;
 				if((data=br.readLine())!=null){
-					System.out.println(data);
+					System.out.println("<< "+data);
 				}
 				
 			}

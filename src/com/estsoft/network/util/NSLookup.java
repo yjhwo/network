@@ -19,7 +19,7 @@ public class NSLookup {
 					break;
 				
 				InetAddress[] inetAddresses = InetAddress.getAllByName(hostname);
-
+					
 				for (int i = 0; i < inetAddresses.length; i++) {
 					System.out.println(hostname + ":" + inetAddresses[i].getHostAddress());
 				}

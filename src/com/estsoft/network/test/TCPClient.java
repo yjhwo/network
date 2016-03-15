@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 //03.14(4)
 
@@ -19,32 +20,34 @@ public class TCPClient {
 			socket = new Socket();
 
 			// 2. 서버 연결
-			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
+			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));	// ip+port에 해당하는 소켓의 주소를 얻어옴
 
 			// 3. IOStream 받아오기
 			InputStream inputStream = socket.getInputStream();
 			OutputStream outputStream = socket.getOutputStream();
-			
+
 			// 4. 읽기/쓰기
 			String data = "Hello World";
 			outputStream.write(data.getBytes("UTF-8"));
-			
+
 			byte[] buffer = new byte[256];
 			int readByteCount = inputStream.read(buffer);
-			if(readByteCount <= -1){
+			if (readByteCount <= -1) {
 				// socket 연결이 끊어짐
 				System.out.println("[client] closed by server");
 				return;
 			}
-			
+
 			data = new String(buffer, 0, readByteCount, "UTF-8");
-			System.out.println("[client] received : "+ data);
-			
+			System.out.println("[client] received : " + data);
+
 			socket.close();
+		} catch (SocketException e) {
+			System.out.println("[Cliet] 비정상적으로 클라이언트가 종료되었습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			if(socket!=null && socket.isClosed()==false){
+		} finally {
+			if (socket != null && socket.isClosed() == false) {
 				try {
 					socket.close();
 				} catch (IOException e) {

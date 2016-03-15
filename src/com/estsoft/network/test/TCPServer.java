@@ -24,16 +24,18 @@ public class TCPServer {
 			// 2. binding(서버의 ip주소와 port번호를)
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			String localhostAddress = inetAddress.getHostAddress(); // ip주소
-			serverSocket.bind(new InetSocketAddress(localhostAddress, PORT)); // ip+port
+			serverSocket.bind(new InetSocketAddress(localhostAddress, PORT)); 
+									// ip+port에 해당하는 소켓의 주소를 얻어옴
 
 			System.out.println("[server] binding " + localhostAddress + ":" + PORT);
 
 			// 3. accept 연결 요청 기다림
 			Socket socket = serverSocket.accept(); // ＊ blocking
-
+			
 			// 4. 연결 성공
 			InetSocketAddress remoteAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
-			String remoteHostAddress = remoteAddress.getAddress().getHostAddress();
+			//String remoteHostAddress = remoteAddress.getAddress().getHostAddress();
+			String remoteHostAddress = remoteAddress.getHostName();
 			int remoteHostPort = remoteAddress.getPort();
 
 			System.out.println("[server] 연결됨 from " + remoteHostAddress + ":" + remoteHostPort);
@@ -49,6 +51,7 @@ public class TCPServer {
 					int readByteCount = inputStream.read(buffer); // ＊ blocking
 
 					if (readByteCount <= -1) {
+						// 정상종료
 						System.out.println("[server] closed by client");
 						break;
 					}
@@ -58,9 +61,7 @@ public class TCPServer {
 					System.out.println("[server] received : " + data);
 
 					// 7. 데이터 쓰기
-					outputStream.write(data.getBytes("utf-8")); // hello world만
-																// byte로
-																// 빼내는 것
+					outputStream.write(data.getBytes("utf-8"));
 				}
 			} catch (SocketException ex) {
 				System.out.println("[server] 비정상적으로 클라이언트가 종료 되었습니다.");
