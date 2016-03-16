@@ -22,11 +22,10 @@ public class TCPServer {
 			serverSocket = new ServerSocket();
 
 			// 2. binding(서버의 ip주소와 port번호를)
-			InetAddress inetAddress = InetAddress.getLocalHost();
+			InetAddress inetAddress = InetAddress.getLocalHost();	// 현재 사용중인 지역 호스트에 대한 InetAddress객체를 얻음
 			String localhostAddress = inetAddress.getHostAddress(); // ip주소
 			serverSocket.bind(new InetSocketAddress(localhostAddress, PORT)); 
 									// ip+port에 해당하는 소켓의 주소를 얻어옴
-
 			System.out.println("[server] binding " + localhostAddress + ":" + PORT);
 
 			// 3. accept 연결 요청 기다림
@@ -35,7 +34,7 @@ public class TCPServer {
 			// 4. 연결 성공
 			InetSocketAddress remoteAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
 			//String remoteHostAddress = remoteAddress.getAddress().getHostAddress();
-			String remoteHostAddress = remoteAddress.getHostName();
+			String remoteHostAddress = remoteAddress.getHostName();	// 호스트명
 			int remoteHostPort = remoteAddress.getPort();
 
 			System.out.println("[server] 연결됨 from " + remoteHostAddress + ":" + remoteHostPort);

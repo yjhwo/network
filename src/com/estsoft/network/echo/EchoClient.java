@@ -31,6 +31,11 @@ public class EchoClient {
 			// InputStreamReader: byte-> 문자
 			// OutputStreamWriter : 문자 -> byte
 			
+			// 데이터 읽기에 타임아웃 설정 0.001초
+			// local에선 빠르기 때문에 error가 뜨지 않았고, 상대방 컴퓨터로 하면 timeout 걸린다.
+			// 소켓에 데이터를 쓰고/읽는 타임아웃을 정한다. -> br.readLine()에서 걸려 있는 것.
+			socket.setSoTimeout(1);	
+			
 			while (true) {
 				System.out.print(">> ");
 				String msg = sc.nextLine();
@@ -41,13 +46,12 @@ public class EchoClient {
 				
 				pw.println(msg);
 				pw.flush();
-//				socket.getOutputStream.write((message+"\n").getBytes());
+//				socket.getOutputStream.write((message+"\n").getBytes());				
 				
 				String data = null;
 				if((data=br.readLine())!=null){
 					System.out.println("<< "+data);
 				}
-				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

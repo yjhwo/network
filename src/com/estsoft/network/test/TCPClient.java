@@ -18,7 +18,22 @@ public class TCPClient {
 		try {
 			// 1. 소켓 생성
 			socket = new Socket();
-
+			
+			// 1-1. 소켓 버퍼 사이즈 확인
+			int rcvBufferSize = socket.getReceiveBufferSize();
+			int sndBufferSize = socket.getSendBufferSize();
+			
+			System.out.println(rcvBufferSize+":"+sndBufferSize);
+			
+			socket.setReceiveBufferSize(1024*1024*10);
+			socket.setSendBufferSize(1024*1024*10);
+			
+			rcvBufferSize = socket.getReceiveBufferSize();
+			sndBufferSize = socket.getSendBufferSize();
+			System.out.println(rcvBufferSize+":"+sndBufferSize);
+			
+			socket.setTcpNoDelay(true);	// Nagle을 off시켜 바로바로 보내는 것				
+			
 			// 2. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));	// ip+port에 해당하는 소켓의 주소를 얻어옴
 
